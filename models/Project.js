@@ -7,7 +7,8 @@ const ProjectSchema = new mongoose.Schema(
         description: { type: String, required: true },
         tickets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }],
         assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-    }
+    },
+    { timestamps: true }
 );
 
 module.exports = mongoose.model('Project', ProjectSchema);
