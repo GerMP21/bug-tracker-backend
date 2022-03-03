@@ -14,7 +14,7 @@ router.get('/:id', async (req, res) => {
 
 //PUT request for users
 router.put('/:id', async (req, res) => {
-    if (req.body.userId == req.params.id) {
+    if (req.body.id == req.params.id) {
         //Hash the password
         if (req.body.password) {
             try {
@@ -26,7 +26,21 @@ router.put('/:id', async (req, res) => {
         }
         //Update the user
         try {
-            const user = await User.findByIdAndUpdate(req.params.id, req.body);
+            const user = await User.findByIdAndUpdate(req.params.id, {$set: req.body});
+            res.status(200).json(user);
+        } catch (err) {
+            res.status(500).json(err.message);
+        }
+    } else {
+        res.status(403).json('Unauthorized');
+    }
+});
+
+//DELETE request for users
+router.delete('/:id', async (req, res) => {
+    if (req.body.id == req.params.id) {
+        try {
+            const user = await User.findByIdAndDelete(req.params.id);
             res.status(200).json(user);
         } catch (err) {
             res.status(500).json(err.message);
