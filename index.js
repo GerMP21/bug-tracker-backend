@@ -4,11 +4,11 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 
-const PORT = process.env.PORT;
-const app = express();
-
 //Configure dotenv
 dotenv.config();
+
+const PORT = process.env.PORT;
+const app = express();
 
 //Connect to MongoDB
 mongoose.connect(
@@ -26,7 +26,8 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 //Use routes
-
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
 
 //Listen to port
 app.listen(PORT, ()=>{
