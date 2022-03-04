@@ -22,6 +22,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+//GET request for getting all projects assigned to a user
+router.get('/u/:user', async (req, res) => {
+    try {
+        const projects = await Project.find({assignedUsers: req.params.user});
+        res.status(200).json(projects);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+});
+
 //GET request for getting a project by id
 router.get('/:id', async (req, res) => {
     try {
