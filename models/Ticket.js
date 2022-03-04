@@ -7,7 +7,7 @@ const TicketSchema = new mongoose.Schema(
         description: { type: String, required: true },
         status: { type: String, required: true },
         priority: { type: String, required: true },
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
         assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
         comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
     },
