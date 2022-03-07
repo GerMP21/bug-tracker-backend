@@ -1,18 +1,16 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     //Get authentication header
     const authHeader = req.get('Authorization');
     if (!authHeader) {
-        req.isAuth = false;
         return next();
     }
 
     //Get authentication token from header
     const token = authHeader.split(' ')[1];
     if (!token) {
-        req.isAuth = false;
         return next();
     }
     
@@ -23,19 +21,17 @@ module.exports = (req, res, next) => {
     //Check if user exists
     const user = await User.findOne({email: email});
     if (!user) {
-        req.isAuth = false;
         return next();
     }
 
     //Check if password is correct
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-        req.isAuth = false;
         return next();
     }
 
     //Set user as authenticated
-    req.isAuth = true;
     req.userId = user.id;
+    req.isAdmin = user.role == 'Admin';
     next();
 }
