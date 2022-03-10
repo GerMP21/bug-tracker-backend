@@ -1,8 +1,13 @@
 const router = require('express').Router();
 const Project = require('../models/Project');
+const basicAuthentication = require('../middleware/basicAuthentication');
 
 //POST request for creating a new project
-router.post('/', async (req, res) => {
+router.post('/', basicAuthentication, async (req, res) => {
+    //Check if user is admin
+    if (!req.isAdmin) {
+        res.status(403).send('Forbidden');
+    }
     try {
         const newProject = new Project(req.body);
         const project = await newProject.save();
@@ -43,7 +48,11 @@ router.get('/:id', async (req, res) => {
 });
 
 //PUT request for updating a project
-router.put('/:id', async (req, res) => {
+router.put('/:id', basicAuthentication, async (req, res) => {
+    //Check if user is admin
+    if (!req.isAdmin) {
+        res.status(403).send('Forbidden');
+    }
     try {
         const project = await Project.findByIdAndUpdate(req.params.id, {$set: req.body});
         res.status(200).json(project);
@@ -53,7 +62,11 @@ router.put('/:id', async (req, res) => {
 });
 
 //DELETE request for deleting a project
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', basicAuthentication, async (req, res) => {
+    //Check if user is admin
+    if (!req.isAdmin) {
+        return res.status(403).json('Forbidden');
+    }
     try {
         const project = await Project.findByIdAndDelete(req.params.id);
         res.status(200).json(project);
