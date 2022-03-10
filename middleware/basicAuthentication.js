@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 module.exports = async (req, res, next) => {
     //Get authentication header
-    const authHeader = req.get('Authorization');
+    const authHeader = req.headers.authorization;
     if (!authHeader) {
         return next();
     }

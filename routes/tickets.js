@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const Ticket = require('../models/Ticket');
+const basicAuthentication = require('../middleware/basicAuthentication');
 
 //POST request for creating a new ticket
-router.post('/', async (req, res) => {
+router.post('/', basicAuthentication, async (req, res) => {
     try {
         const newTicket = new Ticket(req.body);
         const ticket = await newTicket.save();
@@ -43,9 +44,13 @@ router.get('/:id', async (req, res) => {
 });
 
 //PUT request for updating a ticket
-router.put('/:id', async (req, res) => {
+router.put('/:id', basicAuthentication, async (req, res) => {
+    //Check if user is admin
+    if (!req.isAdmin) {
+        res.status(403).send('Forbidden');
+    }
     try {
-        const ticket = await Ticket.findByIdAndUpdate(req.params.id,{ $set: req.body });
+        const ticket = await Ticket.findByIdAndUpdate(req.params.id, { $set: req.body });
         res.status(200).json(ticket);
     } catch (err) {
         res.status(500).json(err.message);
@@ -53,7 +58,11 @@ router.put('/:id', async (req, res) => {
 });
 
 //DELETE request for deleting a ticket
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', basicAuthentication, async (req, res) => {
+    //Check if user is admin
+    if (!req.isAdmin) {
+        return res.status(403).json('Forbidden');
+    }
     try {
         const ticket = await Ticket.findByIdAndDelete(req.params.id);
         res.status(200).json(ticket);
