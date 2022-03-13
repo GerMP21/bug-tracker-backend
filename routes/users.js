@@ -13,6 +13,26 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+//Find all users assigned to a project
+router.get('/p/:id', async (req, res) => {
+    try {
+        const users = await User.find({ assignedProjects: req.params.id });
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+});
+
+//Find all users assigned to a ticket
+router.get('/t/:id', async (req, res) => {
+    try {
+        const users = await User.find({ assignedTickets: req.params.id });
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+});
+
 //Update user by id
 router.put('/:id', basicAuthentication, async (req, res) => {
     //Check if the user to update is the same as the user who is logged in or if the user is an admin

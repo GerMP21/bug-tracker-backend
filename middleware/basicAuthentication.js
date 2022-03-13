@@ -5,13 +5,13 @@ module.exports = async (req, res, next) => {
     //Get authentication header
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        return next();
+        res.status(401).json('Unauthorized');
     }
 
     //Get authentication token from header
     const token = authHeader.split(' ')[1];
     if (!token) {
-        return next();
+        res.status(401).json('Unauthorized');
     }
     
     //Decode token
@@ -21,13 +21,13 @@ module.exports = async (req, res, next) => {
     //Check if user exists
     const user = await User.findOne({email: email});
     if (!user) {
-        return next();
+        res.status(404).json('User not found');
     }
 
     //Check if password is correct
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-        return next();
+        res.status(403).json('Forbidden: Incorrect password');
     }
 
     //Set user as authenticated
