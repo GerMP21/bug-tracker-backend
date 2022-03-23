@@ -9,7 +9,6 @@ const TicketSchema = new mongoose.Schema(
         priority: { type: String, required: true },
         project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' },
         assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-        comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
     },
     { timestamps: true }
 );

@@ -53,3 +53,5 @@ router.delete('/:id', basicAuthentication, async (req, res) => {
         res.status(401).json('Unauthorized');
     }
 });
+
+module.exports = router;
