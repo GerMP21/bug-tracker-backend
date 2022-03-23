@@ -61,6 +61,20 @@ router.put('/:id', basicAuthentication, async (req, res) => {
     }
 });
 
+//Append a user to assigned users
+router.put('/:id/assign/:user', basicAuthentication, async (req, res) => {
+    //Check if user is admin
+    if (!req.isAdmin) {
+        res.status(403).send('Forbidden');
+    }
+    try {
+        const project = await Project.findByIdAndUpdate(req.params.id, {$push: {assignedUsers: req.params.user}});
+        res.status(200).json(project);
+    } catch (err) {
+        res.status(500).json(err.message);
+    }
+});
+
 //DELETE request for deleting a project
 router.delete('/:id', basicAuthentication, async (req, res) => {
     //Check if user is admin

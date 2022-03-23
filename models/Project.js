@@ -5,7 +5,6 @@ const ProjectSchema = new mongoose.Schema(
     {
         name: { type: String, required: true },
         description: { type: String, required: true },
-        tickets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }],
         assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
     },
     { timestamps: true }
